@@ -6,10 +6,11 @@ import ChartsSection from '../components/ChartsSection';
 import RecentSales from '../components/RecentSales';
 import Footer from '../components/Footer';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, Tooltip } from 'recharts';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import './AnalyticsDashboard.css';
 
 const AnalyticsDashboard = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [overviewData, setOverviewData] = useState([
     { name: 'Jan', value: 4000 }, { name: 'Feb', value: 3000 }, { name: 'Mar', value: 2000 },
     { name: 'Apr', value: 2780 }, { name: 'May', value: 1890 }, { name: 'Jun', value: 2390 },
@@ -60,16 +61,30 @@ const AnalyticsDashboard = () => {
 
   return (
     <div className="analytics-dashboard">
-      <Sidebar />
+      <Sidebar className={sidebarOpen ? 'mobile-open' : ''} />
+      {sidebarOpen && (
+        <div 
+          className="sidebar-overlay" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <div className="dashboard-main">
         <div className="top-header">
-          <div className="search-section">
-            <div className="search-bar">
-              <Search size={20} />
-              <input type="text" placeholder="Search..." className="search-input" />
+          <div className="header-left">
+            <button 
+              className="mobile-menu-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <Menu size={20} />
+            </button>
+            <div className="search-section">
+              <div className="search-bar">
+                <Search size={20} />
+                <input type="text" placeholder="Search..." className="search-input" />
+              </div>
             </div>
           </div>
-
+          
           <div className="header-actions">
             <TopBar />
           </div>
