@@ -1,14 +1,14 @@
-# 🚀 Slooze Commodities Management System
+# 🛒 GROSSSTORE - Inventory Management System
 
-![Slooze Logo](./public/FFFFFF-1.png)
+A modern, responsive inventory management system built with React, featuring role-based authentication, real-time analytics dashboard, and premium UI/UX design.
 
-A modern, responsive commodities management system built with React, featuring role-based authentication, real-time analytics dashboard, and premium UI/UX design.
+**Developed by: Aditya**
 
 ## 📋 Application Overview
 
 ### What This Application Does
 
-The Slooze Commodities Management System is a comprehensive web application designed to help businesses manage their commodity inventory efficiently. The application provides:
+GROSSSTORE is a comprehensive web application designed to help businesses manage their inventory efficiently. The application provides:
 
 **🔐 Authentication & Role Management**
 - Secure login system with email/password authentication
@@ -82,43 +82,34 @@ Before running this application, ensure you have:
 - **npm** or **yarn** package manager
 - **Git** for version control
 
-### Installation Steps
+### Quick Start Guide
 
-1. **Clone the Repository**
+1. **Download the Project**
    ```bash
    git clone https://github.com/Aditya-Kumar-Singh-007/slooze-front-end-challenge.git
    cd slooze-front-end-challenge
    ```
 
-2. **Install Dependencies**
+2. **Install Required Packages**
    ```bash
-   # Using npm
    npm install
-   
-   # Or using yarn
-   yarn install
    ```
 
-3. **Start Development Server**
+3. **Run the Application**
    ```bash
-   # Using npm
    npm run dev
-   
-   # Or using yarn
-   yarn dev
    ```
 
-4. **Access the Application**
-   - Open your browser and navigate to `http://localhost:5173`
-   - The application will automatically reload when you make changes
+4. **Open in Browser**
+   - Go to `http://localhost:5173`
+   - Use the demo accounts above to login
 
-### Available Scripts
+### Commands You Can Use
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build locally
-npm run lint         # Run ESLint for code quality
+npm run dev          # Start the app for development
+npm run build        # Create production build
+npm run preview      # Test production build
 ```
 
 ## 🔑 Demo Credentials
@@ -126,136 +117,91 @@ npm run lint         # Run ESLint for code quality
 The application includes pre-configured demo accounts for testing:
 
 ### Manager Account (Full Access)
-- **Email**: `manager@slooze.com`
+- **Email**: `manager@grossstore.com`
 - **Password**: `manager123`
 - **Access**: Dashboard + Products Management
 
 ### Store Keeper Account (Limited Access)
-- **Email**: `keeper@slooze.com`
+- **Email**: `keeper@grossstore.com`
 - **Password**: `keeper123`
 - **Access**: Products Management Only
 
-## 🌐 Netlify Deployment
+## 🌐 Deploy to Netlify (Easy Way)
 
-### Automatic Deployment Setup
+### Simple Steps:
 
-1. **Connect Repository to Netlify**
-   - Go to [Netlify](https://netlify.com) and sign up/login
+1. **Go to Netlify**
+   - Visit [netlify.com](https://netlify.com) and create account
    - Click "New site from Git"
-   - Connect your GitHub repository
-   - Select the `slooze-front-end-challenge` repository
 
-2. **Build Configuration**
-   - **Build command**: `npm run build`
-   - **Publish directory**: `dist`
-   - **Node version**: `18` (set in Environment Variables)
+2. **Connect Your GitHub**
+   - Choose your repository
+   - Use these settings:
+     - **Build command**: `npm run build`
+     - **Publish directory**: `dist`
 
-3. **Environment Variables** (Optional)
-   ```
-   NODE_VERSION=18
-   NPM_VERSION=8
-   ```
+3. **Deploy**
+   - Click "Deploy site"
+   - Your app will be live in minutes!
 
-### Manual Deployment
+### Quick Deploy (Alternative)
 
-1. **Build the Project**
+1. **Build locally**
    ```bash
    npm run build
    ```
 
-2. **Deploy dist folder**
-   - Drag and drop the `dist` folder to Netlify dashboard
-   - Or use Netlify CLI:
-   ```bash
-   npm install -g netlify-cli
-   netlify deploy --prod --dir=dist
-   ```
+2. **Drag & Drop**
+   - Drag the `dist` folder to Netlify dashboard
+   - Done!
 
-### Netlify Configuration File
+## 🔌 Connect to Real Database (For Developers)
 
-The project includes a `netlify.toml` file for optimal deployment:
+### Current Setup
+Right now, the app uses **fake data** stored in your browser. To connect real database:
 
-```toml
-[build]
-  publish = "dist"
-  command = "npm run build"
+### What You Need to Do:
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+1. **Replace Mock Data**
+   - Edit `src/utils/mockData.js`
+   - Point to your real API server
 
-[build.environment]
-  NODE_VERSION = "18"
-```
-
-## 🔌 Backend Integration Guide
-
-### Current State
-The application currently uses **mock data** and **localStorage** for demonstration purposes.
-
-### Steps to Integrate Real Backend
-
-1. **API Service Setup**
-   - Replace mock functions in `src/utils/mockData.js`
-   - Update API endpoints to point to your backend server
-   - Add proper error handling and loading states
-
-2. **Authentication Integration**
-   ```javascript
-   // In src/context/AuthContext.jsx
-   const login = async (email, password) => {
-     const response = await fetch('/api/auth/login', {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ email, password })
-     });
-     // Handle response and JWT tokens
-   };
-   ```
-
-3. **Environment Variables**
-   Create `.env` file for API configuration:
+2. **Add Environment Variables**
+   Create `.env` file:
    ```env
-   VITE_API_BASE_URL=https://your-backend-api.com
-   VITE_GOOGLE_CLIENT_ID=your-google-client-id
-   VITE_FACEBOOK_APP_ID=your-facebook-app-id
+   VITE_API_BASE_URL=https://your-api.com
    ```
 
-4. **Required Backend Endpoints**
+3. **Required API Endpoints**
+   Your backend needs these URLs:
    ```
-   POST /api/auth/login          # User authentication
-   POST /api/auth/register       # User registration
-   GET  /api/auth/me            # Get current user
-   GET  /api/products           # Get all products
-   POST /api/products           # Create new product
-   PUT  /api/products/:id       # Update product
-   DELETE /api/products/:id     # Delete product
-   GET  /api/dashboard/stats    # Dashboard analytics
+   POST /api/auth/login          # Login users
+   GET  /api/products           # Get products
+   POST /api/products           # Add products
+   PUT  /api/products/:id       # Update products
+   DELETE /api/products/:id     # Delete products
+   GET  /api/dashboard/stats    # Dashboard data
    ```
 
-5. **Database Schema Requirements**
+4. **Database Tables Needed**
    ```sql
    -- Users table
    CREATE TABLE users (
-     id UUID PRIMARY KEY,
-     email VARCHAR UNIQUE NOT NULL,
-     password_hash VARCHAR NOT NULL,
-     name VARCHAR NOT NULL,
-     role ENUM('manager', 'store_keeper'),
-     created_at TIMESTAMP DEFAULT NOW()
+     id INT PRIMARY KEY,
+     email VARCHAR(255) UNIQUE,
+     password VARCHAR(255),
+     name VARCHAR(255),
+     role ENUM('manager', 'store_keeper')
    );
    
    -- Products table
    CREATE TABLE products (
-     id UUID PRIMARY KEY,
-     name VARCHAR NOT NULL,
-     category VARCHAR NOT NULL,
-     price DECIMAL(10,2) NOT NULL,
-     stock INTEGER NOT NULL,
-     supplier VARCHAR NOT NULL,
-     created_at TIMESTAMP DEFAULT NOW(),
-     updated_at TIMESTAMP DEFAULT NOW()
+     id INT PRIMARY KEY,
+     name VARCHAR(255),
+     category VARCHAR(255),
+     price DECIMAL(10,2),
+     stock INT,
+     supplier VARCHAR(255)
    );
    ```
 
@@ -277,43 +223,37 @@ The application currently uses **mock data** and **localStorage** for demonstrat
 - **Loading Screens** - Premium loading animations with progress bars
 - **Enhanced Accessibility** - WCAG compliant color contrast and keyboard navigation
 
-## 🔧 Troubleshooting
+## 🔧 Common Problems & Solutions
 
-### Common Issues
+### If Something Goes Wrong:
 
-1. **Port Already in Use**
+1. **Port 5173 is busy**
    ```bash
-   # Kill process on port 5173
-   npx kill-port 5173
-   # Or use different port
    npm run dev -- --port 3000
    ```
 
-2. **Build Errors**
+2. **App won't start**
    ```bash
-   # Clear node_modules and reinstall
-   rm -rf node_modules package-lock.json
+   # Delete and reinstall
+   rm -rf node_modules
    npm install
    ```
 
-3. **Netlify Deployment Issues**
-   - Ensure `dist` folder is being published
-   - Check build logs for errors
-   - Verify Node.js version compatibility
+3. **Deployment fails**
+   - Make sure Node.js version is 16 or higher
+   - Check if `npm run build` works locally
 
-## 📞 Support & Contact
+## 📞 Need Help?
 
-For questions or support regarding this project:
-
-- **Email**: [careers@slooze.xyz](mailto:careers@slooze.xyz)
-- **GitHub Issues**: [Create an issue](https://github.com/Aditya-Kumar-Singh-007/slooze-front-end-challenge/issues)
+- **Email**: [2604aditya@gmail.com](mailto:2604aditya@gmail.com)
+- **GitHub**: [Report issues here](https://github.com/Aditya-Kumar-Singh-007/slooze-front-end-challenge/issues)
 
 ## 📄 License
 
-© Slooze. All Rights Reserved.
+© 2024 Aditya. All Rights Reserved.
 
 This project is created for the Slooze Front-End Challenge. Please do not distribute or share outside the intended evaluation process.
 
 ---
 
-**Built with ❤️ for the Slooze Front-End Challenge**
+**Built with ❤️ by Aditya for the Slooze Front-End Challenge**
