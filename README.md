@@ -1,5 +1,7 @@
 # 🛒 GROSSSTORE - Inventory Management System
 
+**🌐 Live Demo: [https://grosstoreinventorymanagement.netlify.app/](https://grosstoreinventorymanagement.netlify.app/)**
+
 A modern, responsive inventory management system built with React, featuring role-based authentication, real-time analytics dashboard, and premium UI/UX design.
 
 **Developed by: Aditya**
