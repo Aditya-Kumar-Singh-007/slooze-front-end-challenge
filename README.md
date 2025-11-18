@@ -117,12 +117,12 @@ npm run preview      # Test production build
 The application includes pre-configured demo accounts for testing:
 
 ### Manager Account (Full Access)
-- **Email**: `manager@grossstore.com`
+- **Email**: `manager@slooze.com`
 - **Password**: `manager123`
 - **Access**: Dashboard + Products Management
 
 ### Store Keeper Account (Limited Access)
-- **Email**: `keeper@grossstore.com`
+- **Email**: `keeper@slooze.com`
 - **Password**: `keeper123`
 - **Access**: Products Management Only
 

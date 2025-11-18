@@ -36,8 +36,8 @@ export const useAuth = () => {
  * In production, this would be replaced with API calls
  */
 let mockUsers = [
-  { id: 1, email: 'manager@grossstore.com', password: 'manager123', role: 'manager', name: 'John Manager' },
-  { id: 2, email: 'keeper@grossstore.com', password: 'keeper123', role: 'storekeeper', name: 'Jane Keeper' }
+  { id: 1, email: 'manager@slooze.com', password: 'manager123', role: 'manager', name: 'John Manager' },
+  { id: 2, email: 'keeper@slooze.com', password: 'keeper123', role: 'storekeeper', name: 'Jane Keeper' }
 ];
 
 /**
