@@ -66,10 +66,88 @@ We are introducing a **Commodities Management System** to **diversify product va
 - Refer to the [Figma](https://www.figma.com/design/uD9IW2pEx2JRB8xZJD11dx/Slooze-Take-Home-Challenge---Commodity?node-id=1-108&t=KAwt0LRM6NLVV3Qm-1) for more details on the problem statement
 - assume / affix sample data, components and other requirments you may have and state them out during your submission
 
+## 🚀 Setup & Installation
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation Steps
+```bash
+# Clone the repository
+git clone https://github.com/Aditya-Kumar-Singh-007/slooze-front-end-challenge.git
+
+# Navigate to project directory
+cd slooze-front-end-challenge
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Available Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+
+## 🔧 Tech Stack
+- **Frontend**: React 18 + Vite
+- **Styling**: CSS3 with CSS Variables for theming
+- **Routing**: React Router DOM
+- **State Management**: React Context API
+- **Charts**: Chart.js with react-chartjs-2
+- **Icons**: Lucide React
+
+## 📋 Implementation Details
+
+### Authentication System
+- Mock authentication with predefined users
+- JWT-like token simulation stored in localStorage
+- Role-based access control (Manager/Store Keeper)
+
+### Sample Users
+```javascript
+// Manager Account
+Email: manager@slooze.com
+Password: manager123
+
+// Store Keeper Account
+Email: keeper@slooze.com
+Password: keeper123
+```
+
+### Features Implemented
+- ✅ **Login System** (5 points) - Email/password authentication
+- ✅ **Dashboard** (30 points) - Manager-only analytics dashboard
+- ✅ **View Products** (10 points) - Product listing for both roles
+- ✅ **Add/Edit Products** (15 points) - Product management functionality
+- ✅ **Light/Dark Mode** (15 points) - Theme switching with localStorage
+- ✅ **Role-Based UI** (25 points) - Dynamic menu restrictions
+
+### Project Structure
+```
+src/
+├── components/          # Reusable UI components
+│   ├── Navbar.jsx      # Navigation with role-based menu
+│   ├── Sidebar.jsx     # Dashboard sidebar
+│   ├── ProtectedRoute.jsx # Route protection
+│   └── ...
+├── context/            # React Context providers
+│   ├── AuthContext.jsx # Authentication state
+│   └── ThemeContext.jsx # Theme management
+├── pages/              # Page components
+│   ├── Login.jsx       # Authentication page
+│   ├── Dashboard.jsx   # Manager dashboard
+│   ├── Products.jsx    # Product listing
+│   └── ...
+├── utils/              # Utility functions
+│   └── mockData.js     # Sample data
+└── App.jsx             # Main application
+```
+
 ## 📤 Submission
-- Upload your code to GitHub or share as a CodeSandbox/StackBlitz link
-- Include instructions to run the app locally (e.g., npm install && npm run dev)
-- (Optional) Deploy and share a live link using Vercel, Netlify, etc.
 
 ## Connect with Us:
 
