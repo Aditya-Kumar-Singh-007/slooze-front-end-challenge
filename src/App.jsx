@@ -1,3 +1,13 @@
+/**
+ * Main Application Component
+ * 
+ * This is the root component that sets up:
+ * - Theme management (light/dark mode)
+ * - Authentication context (user login state)
+ * - Routing configuration with role-based access
+ * - Protected routes for different user roles
+ */
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -13,13 +23,19 @@ import PlaceholderPage from './pages/PlaceholderPage';
 
 function App() {
   return (
+    // Theme Provider: Manages light/dark mode across the entire app
     <ThemeProvider>
+      {/* Auth Provider: Manages user authentication state */}
       <AuthProvider>
+        {/* Router: Handles client-side routing */}
         <Router>
           <Routes>
+            {/* Public Routes - No authentication required */}
             <Route path="/login" element={<Login />} />
             <Route path="/auth/google/callback" element={<AuthCallback />} />
             <Route path="/auth/facebook/callback" element={<AuthCallback />} />
+            
+            {/* Manager-Only Routes - Requires manager role */}
             <Route 
               path="/dashboard" 
               element={
@@ -28,6 +44,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Shared Routes - Both managers and store keepers can access */}
             <Route 
               path="/products" 
               element={
@@ -44,6 +62,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Manager-Only Analytics Routes */}
             <Route 
               path="/analytics/traffic" 
               element={
@@ -60,6 +80,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Manager-Only Finance Routes */}
             <Route 
               path="/finances/payment" 
               element={
@@ -76,6 +98,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Account Management Routes - Available to all authenticated users */}
             <Route 
               path="/account/profile" 
               element={
@@ -92,6 +116,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Help Route - Available to all authenticated users */}
             <Route 
               path="/help" 
               element={
@@ -100,6 +126,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* Default Route - Redirect to login */}
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>
