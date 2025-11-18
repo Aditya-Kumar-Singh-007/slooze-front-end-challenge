@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../components/Sidebar';
 import TopBar from '../components/TopBar';
 import StatsCards from '../components/StatsCards';
 import ChartsSection from '../components/ChartsSection';
 import RecentSales from '../components/RecentSales';
 import Footer from '../components/Footer';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, Tooltip } from 'recharts';
-import { Search, Menu } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, Tooltip, Area, AreaChart } from 'recharts';
+import { Search, Menu, Zap, TrendingUp, Activity } from 'lucide-react';
 import './AnalyticsDashboard.css';
 
 const AnalyticsDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isLoading, setIsLoading] = useState(true);
+  const dashboardRef = useRef(null);
   const [overviewData, setOverviewData] = useState([
     { name: 'Jan', value: 4000 }, { name: 'Feb', value: 3000 }, { name: 'Mar', value: 2000 },
     { name: 'Apr', value: 2780 }, { name: 'May', value: 1890 }, { name: 'Jun', value: 2390 },
@@ -22,6 +25,15 @@ const AnalyticsDashboard = () => {
   const [salesData, setSalesData] = useState([{ name: 'W1', value: 1200 }, { name: 'W2', value: 1900 }, { name: 'W3', value: 1700 }]);
   const [subscriptionData, setSubscriptionData] = useState([{ name: 'Jan', value: 400 }, { name: 'Feb', value: 300 }, { name: 'Mar', value: 500 }]);
   useEffect(() => {
+    // Simulate loading
+    setTimeout(() => setIsLoading(false), 1500);
+    
+    // Mouse tracking for interactive effects
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
     
     const interval = setInterval(() => {
       setOverviewData(prev => prev.map(item => ({
@@ -45,8 +57,27 @@ const AnalyticsDashboard = () => {
       })));
     }, 2500);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-content">
+          <div className="loading-logo">
+            <Zap size={48} className="loading-icon" />
+          </div>
+          <div className="loading-text">Loading Dashboard...</div>
+          <div className="loading-bar">
+            <div className="loading-progress"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const topProducts = [
     { name: 'Product A', amount: '$1,234' },
@@ -60,7 +91,31 @@ const AnalyticsDashboard = () => {
   ];
 
   return (
-    <div className="analytics-dashboard">
+    <div className="analytics-dashboard" ref={dashboardRef}>
+      {/* Particle Background */}
+      <div className="particle-background">
+        {[...Array(20)].map((_, i) => (
+          <div 
+            key={i} 
+            className="particle" 
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${10 + Math.random() * 20}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Interactive Cursor */}
+      <div 
+        className="cursor-glow" 
+        style={{
+          left: mousePosition.x - 100,
+          top: mousePosition.y - 100
+        }}
+      />
+      
       <Sidebar className={sidebarOpen ? 'mobile-open' : ''} />
       {sidebarOpen && (
         <div 
@@ -91,6 +146,26 @@ const AnalyticsDashboard = () => {
         </div>
         
         <div className="dashboard-content">
+          {/* Welcome Banner */}
+          <div className="welcome-banner">
+            <div className="welcome-content">
+              <div className="welcome-text">
+                <h2>Welcome back, Manager! 👋</h2>
+                <p>Here's what's happening with your business today</p>
+              </div>
+              <div className="welcome-stats">
+                <div className="quick-stat">
+                  <TrendingUp size={20} />
+                  <span>+23.5% Growth</span>
+                </div>
+                <div className="quick-stat">
+                  <Activity size={20} />
+                  <span>Live Updates</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <StatsCards />
           
           <div className="dashboard-body">
@@ -101,12 +176,34 @@ const AnalyticsDashboard = () => {
                   <p>Monthly performance metrics</p>
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={overviewData}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#3b82f6" animationDuration={1000} />
-                  </BarChart>
+                  <AreaChart data={overviewData}>
+                    <defs>
+                      <linearGradient id="overviewGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#1e40af" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#6d28d9" stopOpacity={0.1}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="name" stroke="#475569" />
+                    <YAxis stroke="#475569" />
+                    <Tooltip 
+                      contentStyle={{
+                        background: 'rgba(255, 255, 255, 0.98)',
+                        backdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(30, 64, 175, 0.2)',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+                        color: '#0f172a'
+                      }}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="value" 
+                      stroke="#1e40af" 
+                      strokeWidth={3}
+                      fill="url(#overviewGradient)" 
+                      animationDuration={2000}
+                    />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
@@ -114,9 +211,28 @@ const AnalyticsDashboard = () => {
           </div>
 
           <div className="stats-controls">
-            <select><option>2024</option></select>
-            <select><option>This Week</option></select>
-            <select><option>Compare to 2023</option></select>
+            <div className="control-group">
+              <label>Year</label>
+              <select className="enhanced-select">
+                <option>2024</option>
+                <option>2023</option>
+              </select>
+            </div>
+            <div className="control-group">
+              <label>Period</label>
+              <select className="enhanced-select">
+                <option>This Week</option>
+                <option>This Month</option>
+                <option>This Quarter</option>
+              </select>
+            </div>
+            <div className="control-group">
+              <label>Compare</label>
+              <select className="enhanced-select">
+                <option>Previous Period</option>
+                <option>Same Period Last Year</option>
+              </select>
+            </div>
           </div>
 
           <div className="stats-charts">
@@ -125,7 +241,7 @@ const AnalyticsDashboard = () => {
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={earningsData}>
                   <Tooltip />
-                  <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} animationDuration={1200} />
+                  <Line type="monotone" dataKey="value" stroke="#047857" strokeWidth={3} animationDuration={1200} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -134,7 +250,7 @@ const AnalyticsDashboard = () => {
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={salesData}>
                   <Tooltip />
-                  <Bar dataKey="value" fill="#8b5cf6" animationDuration={1000} />
+                  <Bar dataKey="value" fill="#6d28d9" animationDuration={1000} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -143,7 +259,7 @@ const AnalyticsDashboard = () => {
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={subscriptionData}>
                   <Tooltip />
-                  <Line type="monotone" dataKey="value" stroke="#f59e0b" strokeWidth={2} animationDuration={1200} />
+                  <Line type="monotone" dataKey="value" stroke="#b45309" strokeWidth={3} animationDuration={1200} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -155,7 +271,7 @@ const AnalyticsDashboard = () => {
               <div className="widget-value">$112,893</div>
               <ResponsiveContainer width="100%" height={60}>
                 <LineChart data={earningsData}>
-                  <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={1} dot={false} />
+                  <Line type="monotone" dataKey="value" stroke="#047857" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -164,7 +280,7 @@ const AnalyticsDashboard = () => {
               <div className="widget-value">2,847</div>
               <ResponsiveContainer width="100%" height={60}>
                 <LineChart data={salesData}>
-                  <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={1} dot={false} />
+                  <Line type="monotone" dataKey="value" stroke="#1e40af" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -173,7 +289,7 @@ const AnalyticsDashboard = () => {
               <div className="widget-value">1.2M</div>
               <ResponsiveContainer width="100%" height={60}>
                 <LineChart data={subscriptionData}>
-                  <Line type="monotone" dataKey="value" stroke="#8b5cf6" strokeWidth={1} dot={false} />
+                  <Line type="monotone" dataKey="value" stroke="#6d28d9" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -182,7 +298,7 @@ const AnalyticsDashboard = () => {
               <div className="widget-value">+500</div>
               <ResponsiveContainer width="100%" height={60}>
                 <BarChart data={subscriptionData}>
-                  <Bar dataKey="value" fill="#f59e0b" />
+                  <Bar dataKey="value" fill="#b45309" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

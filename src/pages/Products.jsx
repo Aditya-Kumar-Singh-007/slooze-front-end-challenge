@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { apiService } from '../utils/mockData';
 import Sidebar from '../components/Sidebar';
 import ProductModal from '../components/ProductModal';
-import { Package, Plus, Edit, Trash2, Search, Filter, AlertTriangle, CheckCircle, DollarSign } from 'lucide-react';
+import { Package, Plus, Edit, Trash2, Search, Filter, AlertTriangle, CheckCircle, DollarSign, Zap } from 'lucide-react';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,15 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   useEffect(() => {
     loadProducts();
@@ -106,43 +116,100 @@ const Products = () => {
 
   if (loading) {
     return (
-      <>
-        <Navbar />
-        <div className="container" style={{ padding: '40px 20px' }}>
-          <div className="animate-pulse">
-            <div style={{ height: '40px', background: 'var(--border)', borderRadius: '8px', marginBottom: '30px' }}></div>
-            <div className="products-grid">
-              {[1,2,3,4,5,6].map(i => (
-                <div key={i} style={{ height: '200px', background: 'var(--border)', borderRadius: '16px' }}></div>
-              ))}
-            </div>
+      <div className="loading-screen">
+        <div className="loading-content">
+          <div className="loading-logo">
+            <Zap size={48} className="loading-icon" />
+          </div>
+          <div className="loading-text">Loading Products...</div>
+          <div className="loading-bar">
+            <div className="loading-progress"></div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="products-page">
+      {/* Particle Background */}
+      <div className="particle-background">
+        {[...Array(15)].map((_, i) => (
+          <div 
+            key={i} 
+            className="particle" 
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${10 + Math.random() * 20}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Interactive Cursor */}
+      <div 
+        className="cursor-glow" 
+        style={{
+          left: mousePosition.x - 100,
+          top: mousePosition.y - 100
+        }}
+      />
+      
       <Sidebar />
       <div className="products-page-content">
         <div className="container" style={{ padding: '40px 20px' }}>
-        <div className="animate-fade-in">
+        <motion.div 
+          className="animate-fade-in"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           {/* Header */}
-          <div style={{ marginBottom: '40px' }}>
+          <motion.div 
+            style={{ marginBottom: '40px' }}
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
               <div>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px', background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <motion.h1 
+                  style={{ 
+                    fontSize: '2.5rem', 
+                    fontWeight: '700', 
+                    marginBottom: '8px', 
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)', 
+                    WebkitBackgroundClip: 'text', 
+                    WebkitTextFillColor: 'transparent' 
+                  }}
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                >
                   Products Management
-                </h1>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+                </motion.h1>
+                <motion.p 
+                  style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                >
                   Manage your commodity inventory with ease
-                </p>
+                </motion.p>
               </div>
-              <button onClick={handleAddProduct} className="btn btn-primary btn-lg">
+              <motion.button 
+                onClick={handleAddProduct} 
+                className="btn btn-primary btn-lg"
+                whileHover={{ scale: 1.05, boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)' }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ x: 30, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+              >
                 <Plus size={20} />
                 Add New Product
-              </button>
+              </motion.button>
             </div>
 
             {/* Search and Filter */}
@@ -211,11 +278,35 @@ const Products = () => {
           </div>
           
           {/* Products Grid */}
-          <div className="products-grid">
-            {filteredProducts.map((product, index) => {
-              const stockStatus = getStockStatus(product.stock);
-              return (
-                <div key={product.id} className="product-card animate-slide-in" style={{ animationDelay: `${index * 0.1}s` }}>
+          <motion.div 
+            className="products-grid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
+            <AnimatePresence>
+              {filteredProducts.map((product, index) => {
+                const stockStatus = getStockStatus(product.stock);
+                return (
+                  <motion.div 
+                    key={product.id} 
+                    className="product-card"
+                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -50, scale: 0.9 }}
+                    transition={{ 
+                      delay: index * 0.1, 
+                      duration: 0.6,
+                      type: "spring",
+                      stiffness: 100
+                    }}
+                    whileHover={{ 
+                      y: -8, 
+                      scale: 1.02,
+                      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)'
+                    }}
+                    layout
+                  >
                   <div className="product-header">
                     <div className="product-name">{product.name}</div>
                     <div className={`product-badge ${stockStatus.class}`} style={{ color: stockStatus.color }}>
@@ -266,10 +357,11 @@ const Products = () => {
                       )}
                     </button>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
           
           {filteredProducts.length === 0 && !loading && (
             <div className="card" style={{ textAlign: 'center', padding: '60px 40px' }}>
@@ -291,7 +383,7 @@ const Products = () => {
               )}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
       
       <ProductModal
@@ -300,8 +392,8 @@ const Products = () => {
         onSave={handleSaveProduct}
         product={editingProduct}
       />
-      </>
-    </>
+      </div>
+    </div>
   );
 };
 

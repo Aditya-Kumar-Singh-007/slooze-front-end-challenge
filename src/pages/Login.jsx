@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, Eye, EyeOff, LogIn, Shield, User, Sparkles } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, LogIn, Shield, User, Sparkles, Zap } from 'lucide-react';
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -10,7 +10,16 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { user, login, signup, socialLogin } = useAuth();
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   if (user) {
     return <Navigate to={user.role === 'manager' ? '/dashboard' : '/products'} replace />;
@@ -113,34 +122,85 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <div className="login-form">
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+      {/* Particle Background */}
+      <div className="particle-background">
+        {[...Array(15)].map((_, i) => (
           <div 
+            key={i} 
+            className="particle" 
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${10 + Math.random() * 20}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Interactive Cursor */}
+      <div 
+        className="cursor-glow" 
+        style={{
+          left: mousePosition.x - 100,
+          top: mousePosition.y - 100
+        }}
+      />
+      
+      <motion.div 
+        className="login-form"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.div 
+          style={{ textAlign: 'center', marginBottom: '32px' }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          <motion.div 
             style={{ 
               width: '80px', 
               height: '80px', 
-              background: 'var(--primary)', 
-              borderRadius: '12px', 
+              background: 'linear-gradient(135deg, #667eea, #764ba2)', 
+              borderRadius: '20px', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
               margin: '0 auto 20px',
-              boxShadow: 'var(--shadow-md)'
+              boxShadow: '0 12px 40px rgba(102, 126, 234, 0.3)'
             }}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Shield size={40} color="white" />
-          </div>
-          <h2 className="login-title">
+            <Zap size={40} color="white" />
+          </motion.div>
+          <motion.h2 
+            className="login-title"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
             {isSignup ? 'Create Account' : 'Welcome Back'}
-          </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
+          </motion.h2>
+          <motion.p 
+            style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+          >
             {isSignup ? 'Join the Commodities Management System' : 'Sign in to your account'}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
 
         
-        <form onSubmit={handleSubmit}>
+        <motion.form 
+          onSubmit={handleSubmit}
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+        >
           {isSignup && (
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -228,7 +288,7 @@ const Login = () => {
               </>
             )}
           </button>
-        </form>
+        </motion.form>
 
         <div style={{ textAlign: 'center', margin: '20px 0', color: 'var(--text-secondary)' }}>
           or
@@ -323,7 +383,7 @@ const Login = () => {
         <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
           <p>Built for Slooze Front-End Challenge</p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
