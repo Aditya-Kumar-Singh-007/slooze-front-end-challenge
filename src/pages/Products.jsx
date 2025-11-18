@@ -14,15 +14,9 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [deleteLoading, setDeleteLoading] = useState(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => document.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+
+
 
   useEffect(() => {
     loadProducts();
@@ -147,14 +141,7 @@ const Products = () => {
         ))}
       </div>
       
-      {/* Interactive Cursor */}
-      <div 
-        className="cursor-glow" 
-        style={{
-          left: mousePosition.x - 100,
-          top: mousePosition.y - 100
-        }}
-      />
+
       
       <Sidebar />
       <div className="products-page-content">

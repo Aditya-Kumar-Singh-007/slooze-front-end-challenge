@@ -10,16 +10,10 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   const { user, login, signup, socialLogin } = useAuth();
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => document.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+
 
   if (user) {
     return <Navigate to={user.role === 'manager' ? '/dashboard' : '/products'} replace />;
@@ -137,14 +131,7 @@ const Login = () => {
         ))}
       </div>
       
-      {/* Interactive Cursor */}
-      <div 
-        className="cursor-glow" 
-        style={{
-          left: mousePosition.x - 100,
-          top: mousePosition.y - 100
-        }}
-      />
+
       
       <motion.div 
         className="login-form"

@@ -11,7 +11,7 @@ import './AnalyticsDashboard.css';
 
 const AnalyticsDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   const [isLoading, setIsLoading] = useState(true);
   const dashboardRef = useRef(null);
   const [overviewData, setOverviewData] = useState([
@@ -28,12 +28,7 @@ const AnalyticsDashboard = () => {
     // Simulate loading
     setTimeout(() => setIsLoading(false), 1500);
     
-    // Mouse tracking for interactive effects
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    document.addEventListener('mousemove', handleMouseMove);
+
     
     const interval = setInterval(() => {
       setOverviewData(prev => prev.map(item => ({
@@ -59,7 +54,6 @@ const AnalyticsDashboard = () => {
 
     return () => {
       clearInterval(interval);
-      document.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -107,14 +101,7 @@ const AnalyticsDashboard = () => {
         ))}
       </div>
       
-      {/* Interactive Cursor */}
-      <div 
-        className="cursor-glow" 
-        style={{
-          left: mousePosition.x - 100,
-          top: mousePosition.y - 100
-        }}
-      />
+
       
       <Sidebar className={sidebarOpen ? 'mobile-open' : ''} />
       {sidebarOpen && (
