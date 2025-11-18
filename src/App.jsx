@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import Products from './pages/ProductsNew';
 import AddProduct from './pages/AddProduct';
